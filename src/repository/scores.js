@@ -38,11 +38,12 @@ module.exports.updateUserScore = data => {
     },
     ConditionExpression: `NOT contains(#answers, :v_question)`,
     UpdateExpression:
-      'ADD score :v_pointValue  SET answers = list_append(answers, :v_questionList)',
+      'ADD score :v_pointValue  SET answers = list_append(if_not_exists(answers, :v_empty_list), :v_questionList)',
     ExpressionAttributeValues: {
       ':v_question': data.questionId,
       ':v_questionList': [data.questionId],
-      ':v_pointValue': data.pointValue
+      ':v_pointValue': data.pointValue,
+      ':v_empty_list': []
     },
     ReturnValues: 'ALL_NEW'
   };
@@ -52,7 +53,10 @@ module.exports.updateUserScore = data => {
     .promise()
     .then(res => {
       console.log(res);
-      return { data: res, err: null };
+      return { data: res.Attributes, err: null };
     })
-    .catch(err => ({ data: null, err: err }));
+    .catch(err => {
+      console.log(err);
+      return { data: null, err: err };
+    });
 };

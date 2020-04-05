@@ -166,7 +166,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+                "S3Key": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z/fastfacts.zip"
               },
               "FunctionName": "fastfacts-dev-episodes",
               "Handler": "src/service/episodes.createEpisode",
@@ -195,14 +195,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "EpisodesLambdaVersionPP2AUWHb6c26jDcxBMUNzGRN9jqZkwTJAQC8dBCCaA": {
+          "EpisodesLambdaVersion7y8eVb1EqSYcCJ6SjG6gBheQuHBDkiS87ksZgB4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "EpisodesLambdaFunction"
               },
-              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "CodeSha256": "Yi7pQZkheEA8gkDxXxz1AyYoAqp3o4fHzQLBNrDGjpM=",
               "Description": "Create a new episode"
             }
           },
@@ -213,7 +213,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+                "S3Key": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z/fastfacts.zip"
               },
               "FunctionName": "fastfacts-dev-getEpisodeQuestions",
               "Handler": "src/service/questions.getEpisodeQuestions",
@@ -241,14 +241,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "GetEpisodeQuestionsLambdaVersionDdDm6QE1wZYfikIuzbUUndzJsiJa98brnf1C6ZTxNU": {
+          "GetEpisodeQuestionsLambdaVersion0WrbVPCEbG1GoHdSSIHwHIpRPQcgvNNCBy2g074c": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetEpisodeQuestionsLambdaFunction"
               },
-              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E="
+              "CodeSha256": "Yi7pQZkheEA8gkDxXxz1AyYoAqp3o4fHzQLBNrDGjpM="
             }
           },
           "QuestionsLambdaFunction": {
@@ -258,7 +258,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+                "S3Key": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z/fastfacts.zip"
               },
               "FunctionName": "fastfacts-dev-questions",
               "Handler": "src/service/questions.createQuestion",
@@ -287,14 +287,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "QuestionsLambdaVersion7BfDJ1P9hmcM5VWmP0ooQNccbqGrBCeEHLkcAbTpI": {
+          "QuestionsLambdaVersionbh46Fbb2aFbGwQS5YZEYjqUE3MHhFME62hn7H3bs4Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "QuestionsLambdaFunction"
               },
-              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "CodeSha256": "Yi7pQZkheEA8gkDxXxz1AyYoAqp3o4fHzQLBNrDGjpM=",
               "Description": "Create a new Question"
             }
           },
@@ -305,7 +305,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+                "S3Key": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z/fastfacts.zip"
               },
               "FunctionName": "fastfacts-dev-checkAnswer",
               "Handler": "src/service/questions.checkQuestionAnswer",
@@ -334,14 +334,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "CheckAnswerLambdaVersionJrSiweqs8sjNYuzhaWInbosPI9A51oJhIreEgwqjDHg": {
+          "CheckAnswerLambdaVersionhTZN4uC0ZASRvIBh4prMvzGdooJrB1NgZrumGtsyoE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CheckAnswerLambdaFunction"
               },
-              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "CodeSha256": "Yi7pQZkheEA8gkDxXxz1AyYoAqp3o4fHzQLBNrDGjpM=",
               "Description": "Check given answer for a question."
             }
           },
@@ -352,7 +352,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+                "S3Key": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z/fastfacts.zip"
               },
               "FunctionName": "fastfacts-dev-getHighScores",
               "Handler": "src/service/scores.getHighScores",
@@ -381,14 +381,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "GetHighScoresLambdaVersionSIILsBgHsnCLHrydyVbJsDg8ablZZjkFsVciHGPl8E": {
+          "GetHighScoresLambdaVersionF2B9Fz2BPZCGzNuvqHkRGt4HaA6QXeKUVlL6z75vQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetHighScoresLambdaFunction"
               },
-              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "CodeSha256": "Yi7pQZkheEA8gkDxXxz1AyYoAqp3o4fHzQLBNrDGjpM=",
               "Description": "Get high scores for a given episode"
             }
           },
@@ -503,6 +503,241 @@
                 "Ref": "ApiGatewayResourceQuestionUuidVar"
               },
               "PathPart": "check",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEpisodesOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodes"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEpisodesIdVarQuestionsOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVarQuestions"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodQuestionsOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceQuestions"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodQuestionUuidVarCheckOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceQuestionUuidVarCheck"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEpisodesIdVarHighscoresOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true,
+                    "method.response.header.Access-Control-Allow-Credentials": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+                      "method.response.header.Access-Control-Allow-Credentials": "'false'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".*\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVarHighscores"
+              },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -723,7 +958,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1586105091612": {
+          "ApiGatewayDeployment1586112887006": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -732,6 +967,11 @@
               "StageName": "dev"
             },
             "DependsOn": [
+              "ApiGatewayMethodEpisodesOptions",
+              "ApiGatewayMethodEpisodesIdVarQuestionsOptions",
+              "ApiGatewayMethodQuestionsOptions",
+              "ApiGatewayMethodQuestionUuidVarCheckOptions",
+              "ApiGatewayMethodEpisodesIdVarHighscoresOptions",
               "ApiGatewayMethodEpisodesPost",
               "ApiGatewayMethodEpisodesIdVarQuestionsGet",
               "ApiGatewayMethodQuestionsPost",
@@ -1070,31 +1310,31 @@
           "EpisodesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "EpisodesLambdaVersionPP2AUWHb6c26jDcxBMUNzGRN9jqZkwTJAQC8dBCCaA"
+              "Ref": "EpisodesLambdaVersion7y8eVb1EqSYcCJ6SjG6gBheQuHBDkiS87ksZgB4"
             }
           },
           "GetEpisodeQuestionsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetEpisodeQuestionsLambdaVersionDdDm6QE1wZYfikIuzbUUndzJsiJa98brnf1C6ZTxNU"
+              "Ref": "GetEpisodeQuestionsLambdaVersion0WrbVPCEbG1GoHdSSIHwHIpRPQcgvNNCBy2g074c"
             }
           },
           "QuestionsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "QuestionsLambdaVersion7BfDJ1P9hmcM5VWmP0ooQNccbqGrBCeEHLkcAbTpI"
+              "Ref": "QuestionsLambdaVersionbh46Fbb2aFbGwQS5YZEYjqUE3MHhFME62hn7H3bs4Q"
             }
           },
           "CheckAnswerLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CheckAnswerLambdaVersionJrSiweqs8sjNYuzhaWInbosPI9A51oJhIreEgwqjDHg"
+              "Ref": "CheckAnswerLambdaVersionhTZN4uC0ZASRvIBh4prMvzGdooJrB1NgZrumGtsyoE"
             }
           },
           "GetHighScoresLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetHighScoresLambdaVersionSIILsBgHsnCLHrydyVbJsDg8ablZZjkFsVciHGPl8E"
+              "Ref": "GetHighScoresLambdaVersionF2B9Fz2BPZCGzNuvqHkRGt4HaA6QXeKUVlL6z75vQ"
             }
           },
           "ServiceEndpoint": {
@@ -1161,6 +1401,25 @@
             "http": {
               "path": "episodes",
               "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
@@ -1179,6 +1438,25 @@
             "http": {
               "path": "episodes/{id}/questions",
               "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
@@ -1198,6 +1476,25 @@
             "http": {
               "path": "questions",
               "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
@@ -1217,6 +1514,25 @@
             "http": {
               "path": "question/{uuid}/check",
               "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
@@ -1236,6 +1552,25 @@
             "http": {
               "path": "episodes/{id}/highscores",
               "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
               "integration": "AWS_PROXY"
             }
           }
@@ -1394,7 +1729,7 @@
     "artifact": "/Users/alexei/Desktop/sandbox/fastfacts/.serverless/fastfacts.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z",
+    "artifactDirectoryName": "serverless/fastfacts/dev/1586112890925-2020-04-05T18:54:50.925Z",
     "artifact": "fastfacts.zip"
   }
 }

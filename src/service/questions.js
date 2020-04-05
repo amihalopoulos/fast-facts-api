@@ -6,6 +6,11 @@ module.exports.createQuestion = (event, context, callback) => {
     if (result.error) {
       return callback(null, {
         statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           message: `Unable to submit question`
         })
@@ -14,9 +19,14 @@ module.exports.createQuestion = (event, context, callback) => {
 
     return callback(null, {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: `Success`,
-        episode: result.data
+        data: result.data
       })
     });
   });
@@ -28,6 +38,11 @@ module.exports.getEpisodeQuestions = (event, context, callback) => {
     if (result.error) {
       return callback(null, {
         statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           message: `Unable to find episode questions`
         })
@@ -36,6 +51,11 @@ module.exports.getEpisodeQuestions = (event, context, callback) => {
 
     return callback(null, {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: `Success`,
         data: result.data
@@ -53,6 +73,11 @@ module.exports.checkQuestionAnswer = async (event, context, callback) => {
   if (question.error != null) {
     return callback(null, {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: `Unable to find question`
       })
@@ -69,18 +94,30 @@ module.exports.checkQuestionAnswer = async (event, context, callback) => {
   };
 
   const userScore = await ScoreRepo.updateUserScore(data);
-  console.log(userScore);
+
   if (userScore.err) {
     return callback(null, {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: `Unable to update score`
       })
     });
   }
 
+  userScore.data.result = answerResult;
+
   return callback(null, {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
       message: `Success`,
       data: userScore.data

@@ -27,12 +27,14 @@ functions:
       - http:
           path: episodes
           method: post
+          cors: true
   getEpisodeQuestions:
     handler: src/service/questions.getEpisodeQuestions
     events:
       - http:
           path: episodes/{id}/questions
           method: get
+          cors: true
   questions:
     handler: src/service/questions.createQuestion
     description: Create a new Question
@@ -40,6 +42,7 @@ functions:
       - http:
           path: questions
           method: post
+          cors: true
   checkAnswer:
     handler: src/service/questions.checkQuestionAnswer
     description: Check given answer for a question.
@@ -47,6 +50,7 @@ functions:
       - http:
           path: question/{uuid}/check
           method: post
+          cors: true
   getHighScores:
     handler: src/service/scores.getHighScores
     description: Get high scores for a given episode
@@ -54,6 +58,7 @@ functions:
       - http:
           path: episodes/{id}/highscores
           method: get
+          cors: true
 resources:
   Resources:
     EpisodesDynamoDbTable:

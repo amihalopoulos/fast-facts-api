@@ -5,6 +5,11 @@ module.exports.createEpisode = (event, context, callback) => {
     if (result.error) {
       return callback(null, {
         statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           message: `Unable to submit episode`
         })
@@ -13,9 +18,14 @@ module.exports.createEpisode = (event, context, callback) => {
 
     return callback(null, {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         message: `Success`,
-        episode: result.data
+        data: result.data
       })
     });
   });
