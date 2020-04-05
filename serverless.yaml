@@ -1,0 +1,137 @@
+service: fastfacts
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: '*'
+  environment:
+    EPISODES_TABLE: fast_facts_episodes
+    QUESTIONS_TABLE: fast_facts_questions
+    QUESTION_EPISODE_INDEX: EpisodeIndex
+    SCORES_TABLE: fast_facts_scores
+    SCORES_EPISODE_INDEX: EpisodeIndex
+functions:
+  episodes:
+    handler: src/service/episodes.createEpisode
+    description: Create a new episode
+    events:
+      - http:
+          path: episodes
+          method: post
+  getEpisodeQuestions:
+    handler: src/service/questions.getEpisodeQuestions
+    events:
+      - http:
+          path: episodes/{id}/questions
+          method: get
+  questions:
+    handler: src/service/questions.createQuestion
+    description: Create a new Question
+    events:
+      - http:
+          path: questions
+          method: post
+  checkAnswer:
+    handler: src/service/questions.checkQuestionAnswer
+    description: Check given answer for a question.
+    events:
+      - http:
+          path: question/{uuid}/check
+          method: post
+  getHighScores:
+    handler: src/service/scores.getHighScores
+    description: Get high scores for a given episode
+    events:
+      - http:
+          path: episodes/{id}/highscores
+          method: get
+resources:
+  Resources:
+    EpisodesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.EPISODES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: 'uuid'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'uuid'
+            KeyType: 'HASH'
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    QuestionsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.QUESTIONS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: 'uuid'
+            AttributeType: 'S'
+          - AttributeName: 'episode'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'uuid'
+            KeyType: 'HASH'
+          - AttributeName: 'episode'
+            KeyType: 'RANGE'
+        ProvisionedThroughput:
+          ReadCapacityUnits: '5'
+          WriteCapacityUnits: '5'
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.QUESTION_EPISODE_INDEX}
+            KeySchema:
+              - AttributeName: episode
+                KeyType: HASH
+            Projection:
+              NonKeyAttributes:
+                - question
+              ProjectionType: INCLUDE
+            ProvisionedThroughput:
+              ReadCapacityUnits: '5'
+              WriteCapacityUnits: '5'
+    ScoresDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.SCORES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: 'ipAddress'
+            AttributeType: 'S'
+          - AttributeName: 'episode'
+            AttributeType: 'S'
+          - AttributeName: 'score'
+            AttributeType: 'N'
+        KeySchema:
+          - AttributeName: 'ipAddress'
+            KeyType: 'HASH'
+          - AttributeName: 'episode'
+            KeyType: 'RANGE'
+        ProvisionedThroughput:
+          ReadCapacityUnits: '5'
+          WriteCapacityUnits: '5'
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.SCORES_EPISODE_INDEX}
+            KeySchema:
+              - AttributeName: episode
+                KeyType: HASH
+              - AttributeName: score
+                KeyType: RANGE
+            Projection:
+              NonKeyAttributes:
+                - score
+                - username
+              ProjectionType: INCLUDE
+            ProvisionedThroughput:
+              ReadCapacityUnits: '5'
+              WriteCapacityUnits: '5'

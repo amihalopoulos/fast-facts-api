@@ -1,0 +1,1400 @@
+{
+  "service": {
+    "service": "fastfacts",
+    "serviceObject": {
+      "name": "fastfacts"
+    },
+    "provider": {
+      "stage": "dev",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)*]+?)}",
+      "name": "aws",
+      "runtime": "nodejs12.x",
+      "region": "us-west-2",
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem"
+          ],
+          "Resource": "*"
+        }
+      ],
+      "environment": {
+        "EPISODES_TABLE": "fast_facts_episodes",
+        "QUESTIONS_TABLE": "fast_facts_questions",
+        "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+        "SCORES_TABLE": "fast_facts_scores",
+        "SCORES_EPISODE_INDEX": "EpisodeIndex"
+      },
+      "versionFunctions": true,
+      "remoteFunctionData": null,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "EpisodesLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/fastfacts-dev-episodes"
+            }
+          },
+          "GetEpisodeQuestionsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/fastfacts-dev-getEpisodeQuestions"
+            }
+          },
+          "QuestionsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/fastfacts-dev-questions"
+            }
+          },
+          "CheckAnswerLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/fastfacts-dev-checkAnswer"
+            }
+          },
+          "GetHighScoresLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/fastfacts-dev-getHighScores"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "fastfacts",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/fastfacts-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/fastfacts-dev*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "fastfacts",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "EpisodesLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+              },
+              "FunctionName": "fastfacts-dev-episodes",
+              "Handler": "src/service/episodes.createEpisode",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "Description": "Create a new episode",
+              "Environment": {
+                "Variables": {
+                  "EPISODES_TABLE": "fast_facts_episodes",
+                  "QUESTIONS_TABLE": "fast_facts_questions",
+                  "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+                  "SCORES_TABLE": "fast_facts_scores",
+                  "SCORES_EPISODE_INDEX": "EpisodeIndex"
+                }
+              }
+            },
+            "DependsOn": [
+              "EpisodesLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "EpisodesLambdaVersionPP2AUWHb6c26jDcxBMUNzGRN9jqZkwTJAQC8dBCCaA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "EpisodesLambdaFunction"
+              },
+              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "Description": "Create a new episode"
+            }
+          },
+          "GetEpisodeQuestionsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+              },
+              "FunctionName": "fastfacts-dev-getEpisodeQuestions",
+              "Handler": "src/service/questions.getEpisodeQuestions",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "EPISODES_TABLE": "fast_facts_episodes",
+                  "QUESTIONS_TABLE": "fast_facts_questions",
+                  "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+                  "SCORES_TABLE": "fast_facts_scores",
+                  "SCORES_EPISODE_INDEX": "EpisodeIndex"
+                }
+              }
+            },
+            "DependsOn": [
+              "GetEpisodeQuestionsLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "GetEpisodeQuestionsLambdaVersionDdDm6QE1wZYfikIuzbUUndzJsiJa98brnf1C6ZTxNU": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetEpisodeQuestionsLambdaFunction"
+              },
+              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E="
+            }
+          },
+          "QuestionsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+              },
+              "FunctionName": "fastfacts-dev-questions",
+              "Handler": "src/service/questions.createQuestion",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "Description": "Create a new Question",
+              "Environment": {
+                "Variables": {
+                  "EPISODES_TABLE": "fast_facts_episodes",
+                  "QUESTIONS_TABLE": "fast_facts_questions",
+                  "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+                  "SCORES_TABLE": "fast_facts_scores",
+                  "SCORES_EPISODE_INDEX": "EpisodeIndex"
+                }
+              }
+            },
+            "DependsOn": [
+              "QuestionsLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "QuestionsLambdaVersion7BfDJ1P9hmcM5VWmP0ooQNccbqGrBCeEHLkcAbTpI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "QuestionsLambdaFunction"
+              },
+              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "Description": "Create a new Question"
+            }
+          },
+          "CheckAnswerLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+              },
+              "FunctionName": "fastfacts-dev-checkAnswer",
+              "Handler": "src/service/questions.checkQuestionAnswer",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "Description": "Check given answer for a question.",
+              "Environment": {
+                "Variables": {
+                  "EPISODES_TABLE": "fast_facts_episodes",
+                  "QUESTIONS_TABLE": "fast_facts_questions",
+                  "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+                  "SCORES_TABLE": "fast_facts_scores",
+                  "SCORES_EPISODE_INDEX": "EpisodeIndex"
+                }
+              }
+            },
+            "DependsOn": [
+              "CheckAnswerLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "CheckAnswerLambdaVersionJrSiweqs8sjNYuzhaWInbosPI9A51oJhIreEgwqjDHg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CheckAnswerLambdaFunction"
+              },
+              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "Description": "Check given answer for a question."
+            }
+          },
+          "GetHighScoresLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z/fastfacts.zip"
+              },
+              "FunctionName": "fastfacts-dev-getHighScores",
+              "Handler": "src/service/scores.getHighScores",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Timeout": 6,
+              "Description": "Get high scores for a given episode",
+              "Environment": {
+                "Variables": {
+                  "EPISODES_TABLE": "fast_facts_episodes",
+                  "QUESTIONS_TABLE": "fast_facts_questions",
+                  "QUESTION_EPISODE_INDEX": "EpisodeIndex",
+                  "SCORES_TABLE": "fast_facts_scores",
+                  "SCORES_EPISODE_INDEX": "EpisodeIndex"
+                }
+              }
+            },
+            "DependsOn": [
+              "GetHighScoresLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "GetHighScoresLambdaVersionSIILsBgHsnCLHrydyVbJsDg8ablZZjkFsVciHGPl8E": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetHighScoresLambdaFunction"
+              },
+              "CodeSha256": "Uk1JkM8zCS/k0P50MMtqZGr7OAFSEd/K4Mx8EJezF+E=",
+              "Description": "Get high scores for a given episode"
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-fastfacts",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceEpisodes": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "episodes",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEpisodesIdVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEpisodes"
+              },
+              "PathPart": "{id}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEpisodesIdVarQuestions": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVar"
+              },
+              "PathPart": "questions",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceEpisodesIdVarHighscores": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVar"
+              },
+              "PathPart": "highscores",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceQuestions": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "questions",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceQuestion": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "question",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceQuestionUuidVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceQuestion"
+              },
+              "PathPart": "{uuid}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceQuestionUuidVarCheck": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceQuestionUuidVar"
+              },
+              "PathPart": "check",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEpisodesPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodes"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "EpisodesLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodEpisodesIdVarQuestionsGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVarQuestions"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetEpisodeQuestionsLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodQuestionsPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceQuestions"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "QuestionsLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodQuestionUuidVarCheckPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceQuestionUuidVarCheck"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CheckAnswerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodEpisodesIdVarHighscoresGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEpisodesIdVarHighscores"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetHighScoresLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1586105091612": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodEpisodesPost",
+              "ApiGatewayMethodEpisodesIdVarQuestionsGet",
+              "ApiGatewayMethodQuestionsPost",
+              "ApiGatewayMethodQuestionUuidVarCheckPost",
+              "ApiGatewayMethodEpisodesIdVarHighscoresGet"
+            ]
+          },
+          "EpisodesLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "EpisodesLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetEpisodeQuestionsLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetEpisodeQuestionsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "QuestionsLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "QuestionsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "CheckAnswerLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CheckAnswerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetHighScoresLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetHighScoresLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "EpisodesDynamoDbTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "TableName": "fast_facts_episodes",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "uuid",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "uuid",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+              }
+            }
+          },
+          "QuestionsDynamoDbTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "TableName": "fast_facts_questions",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "uuid",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "episode",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "uuid",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "episode",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": "5",
+                "WriteCapacityUnits": "5"
+              },
+              "GlobalSecondaryIndexes": [
+                {
+                  "IndexName": "EpisodeIndex",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "episode",
+                      "KeyType": "HASH"
+                    }
+                  ],
+                  "Projection": {
+                    "NonKeyAttributes": [
+                      "question"
+                    ],
+                    "ProjectionType": "INCLUDE"
+                  },
+                  "ProvisionedThroughput": {
+                    "ReadCapacityUnits": "5",
+                    "WriteCapacityUnits": "5"
+                  }
+                }
+              ]
+            }
+          },
+          "ScoresDynamoDbTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "TableName": "fast_facts_scores",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "ipAddress",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "episode",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "score",
+                  "AttributeType": "N"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "ipAddress",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "episode",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": "5",
+                "WriteCapacityUnits": "5"
+              },
+              "GlobalSecondaryIndexes": [
+                {
+                  "IndexName": "EpisodeIndex",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "episode",
+                      "KeyType": "HASH"
+                    },
+                    {
+                      "AttributeName": "score",
+                      "KeyType": "RANGE"
+                    }
+                  ],
+                  "Projection": {
+                    "NonKeyAttributes": [
+                      "score",
+                      "username"
+                    ],
+                    "ProjectionType": "INCLUDE"
+                  },
+                  "ProvisionedThroughput": {
+                    "ReadCapacityUnits": "5",
+                    "WriteCapacityUnits": "5"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "EpisodesLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "EpisodesLambdaVersionPP2AUWHb6c26jDcxBMUNzGRN9jqZkwTJAQC8dBCCaA"
+            }
+          },
+          "GetEpisodeQuestionsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetEpisodeQuestionsLambdaVersionDdDm6QE1wZYfikIuzbUUndzJsiJa98brnf1C6ZTxNU"
+            }
+          },
+          "QuestionsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "QuestionsLambdaVersion7BfDJ1P9hmcM5VWmP0ooQNccbqGrBCeEHLkcAbTpI"
+            }
+          },
+          "CheckAnswerLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CheckAnswerLambdaVersionJrSiweqs8sjNYuzhaWInbosPI9A51oJhIreEgwqjDHg"
+            }
+          },
+          "GetHighScoresLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetHighScoresLambdaVersionSIILsBgHsnCLHrydyVbJsDg8ablZZjkFsVciHGPl8E"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "pluginsData": {},
+    "functions": {
+      "episodes": {
+        "handler": "src/service/episodes.createEpisode",
+        "description": "Create a new episode",
+        "events": [
+          {
+            "http": {
+              "path": "episodes",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "fastfacts-dev-episodes",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "getEpisodeQuestions": {
+        "handler": "src/service/questions.getEpisodeQuestions",
+        "events": [
+          {
+            "http": {
+              "path": "episodes/{id}/questions",
+              "method": "get",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "fastfacts-dev-getEpisodeQuestions",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "questions": {
+        "handler": "src/service/questions.createQuestion",
+        "description": "Create a new Question",
+        "events": [
+          {
+            "http": {
+              "path": "questions",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "fastfacts-dev-questions",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "checkAnswer": {
+        "handler": "src/service/questions.checkQuestionAnswer",
+        "description": "Check given answer for a question.",
+        "events": [
+          {
+            "http": {
+              "path": "question/{uuid}/check",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "fastfacts-dev-checkAnswer",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      },
+      "getHighScores": {
+        "handler": "src/service/scores.getHighScores",
+        "description": "Get high scores for a given episode",
+        "events": [
+          {
+            "http": {
+              "path": "episodes/{id}/highscores",
+              "method": "get",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "fastfacts-dev-getHighScores",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {}
+      }
+    },
+    "resources": {
+      "Resources": {
+        "EpisodesDynamoDbTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "TableName": "fast_facts_episodes",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "uuid",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "uuid",
+                "KeyType": "HASH"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            }
+          }
+        },
+        "QuestionsDynamoDbTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "TableName": "fast_facts_questions",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "uuid",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "episode",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "uuid",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "episode",
+                "KeyType": "RANGE"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": "5",
+              "WriteCapacityUnits": "5"
+            },
+            "GlobalSecondaryIndexes": [
+              {
+                "IndexName": "EpisodeIndex",
+                "KeySchema": [
+                  {
+                    "AttributeName": "episode",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "Projection": {
+                  "NonKeyAttributes": [
+                    "question"
+                  ],
+                  "ProjectionType": "INCLUDE"
+                },
+                "ProvisionedThroughput": {
+                  "ReadCapacityUnits": "5",
+                  "WriteCapacityUnits": "5"
+                }
+              }
+            ]
+          }
+        },
+        "ScoresDynamoDbTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "TableName": "fast_facts_scores",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "ipAddress",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "episode",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "score",
+                "AttributeType": "N"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "ipAddress",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "episode",
+                "KeyType": "RANGE"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": "5",
+              "WriteCapacityUnits": "5"
+            },
+            "GlobalSecondaryIndexes": [
+              {
+                "IndexName": "EpisodeIndex",
+                "KeySchema": [
+                  {
+                    "AttributeName": "episode",
+                    "KeyType": "HASH"
+                  },
+                  {
+                    "AttributeName": "score",
+                    "KeyType": "RANGE"
+                  }
+                ],
+                "Projection": {
+                  "NonKeyAttributes": [
+                    "score",
+                    "username"
+                  ],
+                  "ProjectionType": "INCLUDE"
+                },
+                "ProvisionedThroughput": {
+                  "ReadCapacityUnits": "5",
+                  "WriteCapacityUnits": "5"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Outputs": {}
+    },
+    "serviceFilename": "serverless.yaml",
+    "layers": {},
+    "artifact": "/Users/alexei/Desktop/sandbox/fastfacts/.serverless/fastfacts.zip"
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/fastfacts/dev/1586105094973-2020-04-05T16:44:54.973Z",
+    "artifact": "fastfacts.zip"
+  }
+}

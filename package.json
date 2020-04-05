@@ -1,0 +1,17 @@
+{
+  "name": "fastfacts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+  },
+  "author": "Alexei",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.653.0",
+    "bluebird": "^3.7.2",
+    "uuid": "^7.0.3"
+  }
+}
